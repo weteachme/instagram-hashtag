@@ -1,5 +1,4 @@
-require 'rspec'
-require 'instagram_crawler/crawl'
+require 'spec_helper'
 
 RSpec.describe InstagramCrawler::Crawl do
   describe '#call' do

@@ -4,7 +4,7 @@ require 'JSON'
 
 module InstagramCrawler
   class Crawl
-    def self.get_image_hash(url: '', limit: 9)
+    def self.get_info_hash(url: '', limit: 9)
       page = HTTParty.get(url)
       parse_page = Nokogiri::HTML(page)
       inline = parse_page.xpath('/html/body/script[3]').last.text
