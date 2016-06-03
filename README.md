@@ -12,9 +12,8 @@ This is how you scrape data from Instagram hashtag page to get feeds.:
 ```
   require 'instagram_crawler/crawl'
 
-  crawler = InstagramCrawler::Crawl.new(url: 'https://www.instagram.com/explore/tags/some_tag/')
-  result = crawler.call
-  puts result 
+  hash = InstagramCrawler::Crawl.get_info_hash(hashtag: 'some_tag')
+  puts hash
   
   # it will produce something like this
   # [{:image=>
