@@ -5,7 +5,7 @@ RSpec.describe InstagramCrawler::Crawl do
     it 'should return a array of hash' do
       allow(HTTParty).to receive(:get).and_return(get_file_string)
 
-      result = InstagramCrawler::Crawl.get_info_hash(url: 'https://www.instagram.com/explore/tags/wtm_tes/')
+      result = InstagramCrawler::Crawl.get_info_hash(hashtag: 'wtm_tes')
       expect(result).to be_instance_of(Array)
       result.each do |item|
         expect(item).to be_instance_of(Hash)
