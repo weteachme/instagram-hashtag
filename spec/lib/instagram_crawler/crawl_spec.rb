@@ -15,5 +15,13 @@ RSpec.describe InstagramCrawler::Crawl do
     it 'should output HTTP empty url when url is empty' do
       expect { InstagramCrawler::Crawl.get_info_hash }.to raise_error(ArgumentError)
     end
+
+    it 'should pass emtpy_response as well' do
+      allow(HTTParty).to receive(:get).and_return(get_empty_file_string)
+
+      result = InstagramCrawler::Crawl.get_info_hash(hashtag: 'wtm_tes')
+      expect(result).to be_instance_of(Array)
+      expect(result.length).to eq 0
+    end
   end
 end
