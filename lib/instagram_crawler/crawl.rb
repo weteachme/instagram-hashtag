@@ -26,14 +26,14 @@ module InstagramCrawler
             },
             standard_resolution: {
               url: post['display_src']
-            },
-            code: post['code'],
-            caption: post['caption'],
-            created_time: post['date'],
-            link: LINK_URL_PREFIX + post['code'] + '/',
-            likes: post['likes'],
-            comments: post['comments']
-          }
+            }
+          },
+          code: post['code'],
+          caption: post['caption'],
+          created_time: post['date'],
+          link: LINK_URL_PREFIX + post['code'] + '/',
+          likes: post['likes'],
+          comments: post['comments']
         }
       end
 
