@@ -7,7 +7,7 @@ module InstagramCrawler
 
         begin
           sibling = sibling.next_element
-        end while sibling.text.empty? && !(sibling.text =~ /#{json_matcher}/)
+        end while sibling && sibling.text.empty? && !(sibling.text =~ /#{json_matcher}/)
 
         inline_text = sibling.text
 
