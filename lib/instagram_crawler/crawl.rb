@@ -7,16 +7,35 @@ module InstagramCrawler
   class Crawl
     extend InstagramCrawler::JSONParser
 
-    DEFAULT_URL = 'https://www.instagram.com/explore/tags/'
+    DEFAULT_URL_PREFIX = 'https://www.instagram.com/explore/tags/'
+    LINK_URL_PREFIX = 'http://instagr.am/p/'
 
     def self.get_info_hash(hashtag:, limit: 9)
-      url = DEFAULT_URL + hashtag
+      url = DEFAULT_URL_PREFIX + hashtag
       parse_page = get_and_parse(url)
 
       json = get_parsed_json(parse_page)
 
       data = json['entry_data']['TagPage'].first['tag']['media']['nodes'].first(limit)
-      mapped_data = data.map{|post| { image: { thumb: post['thumbnail_src'], url: post['display_src'] }, code: post['code'], caption: post['caption'], date: post['date'] } }
+      mapped_data = data.map do |post|
+        {
+          id: post['id'],
+          images: {
+            thumbnail: {
+              url: post['thumbnail_src']
+            },
+            standard_resolution: {
+              url: post['display_src']
+            },
+            code: post['code'],
+            caption: post['caption'],
+            created_time: post['date'],
+            link: LINK_URL_PREFIX + post['code'] + '/',
+            likes: post['likes'],
+            comments: post['comments']
+          }
+        }
+      end
 
       mapped_data
     end
