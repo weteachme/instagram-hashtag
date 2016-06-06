@@ -11,8 +11,6 @@ engines:
     enabled: true
   rubocop:
     enabled: true
-    AllCops:
-      TargetRubyVersion: 2.2
 ratings:
   paths:
     - "**.rb"
