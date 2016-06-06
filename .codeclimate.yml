@@ -16,16 +16,3 @@ engines:
 ratings:
   paths:
     - "**.rb"
-exclude_paths:
-  - "config.ru"
-  - "config/*"
-  - "config/**/*"
-  - ".codeclimate.yml"
-  - ".rubocop.yml"
-  - "Gemfile"
-  - "Gemfile.lock"
-  - "Rakefile"
-  - "Capfile"
-  - "*.md"
-  - "spec/*"
-  - "spec/**/*"
