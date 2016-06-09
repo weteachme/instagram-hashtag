@@ -15,6 +15,8 @@ engines:
       - 5109f44793f3be66f503603ca0c389ec
       - a452fb02c77e73c1b3e943605bb5abf3
       - c4e9409d5a05c27c9d28ca84eb4c1ffc
+      - c9684dab88f04ea97923fde4fc21e1e1
+      - b6a4c8c37c2c54c27ef7680e65610931
 ratings:
   paths:
     - "**.rb"
