@@ -28,19 +28,14 @@ module InstagramCrawler
     protected
       class << self
         def get_hash_for_post(post)
-          {
-            id: post['id'],
+          { id: post['id'],
             images: {
               thumbnail: {
                 url: post['thumbnail_src']
-              },
-              standard_resolution: {
-                url: post['display_src']
-              }
+              }, standard_resolution: { url: post['display_src'] }
             },
             code: post['code'], caption: post['caption'], created_time: post['date'], link: LINK_URL_PREFIX + post['code'] + '/',
-            likes: post['likes'], comments: post['comments']
-          }
+            likes: post['likes'], comments: post['comments']}
         end
         def get_and_parse(url)
           Nokogiri::HTML HTTParty.get(url)
