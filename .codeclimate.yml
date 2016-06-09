@@ -21,6 +21,7 @@ engines:
       - cdb8ff60ef14830aeb86d43807c3b743
       - c84bf8ba0b45e9365c58a60bc7b65f96
       - 5a362a2ccb74adc2d43481169ac81ccd
+      - 381a00d85aa349361a11a80141ae3ac3
 ratings:
   paths:
     - "**.rb"

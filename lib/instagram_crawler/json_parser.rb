@@ -1,6 +1,5 @@
 module InstagramCrawler
   module JSONParser
-
     protected
 
       def get_parsed_json(page_content)
