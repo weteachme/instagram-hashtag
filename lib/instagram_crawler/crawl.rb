@@ -17,24 +17,9 @@ module InstagramCrawler
       json = get_parsed_json(parse_page)
 
       data = json['entry_data']['TagPage'].first['tag']['media']['nodes'].first(limit)
+
       mapped_data = data.map do |post|
-        {
-          id: post['id'],
-          images: {
-            thumbnail: {
-              url: post['thumbnail_src']
-            },
-            standard_resolution: {
-              url: post['display_src']
-            }
-          },
-          code: post['code'],
-          caption: post['caption'],
-          created_time: post['date'],
-          link: LINK_URL_PREFIX + post['code'] + '/',
-          likes: post['likes'],
-          comments: post['comments']
-        }
+        get_hash_for_post(post)
       end
 
       mapped_data
@@ -42,6 +27,21 @@ module InstagramCrawler
 
     protected
       class << self
+        def get_hash_for_post(post)
+          {
+            id: post['id'],
+            images: {
+              thumbnail: {
+                url: post['thumbnail_src']
+              },
+              standard_resolution: {
+                url: post['display_src']
+              }
+            },
+            code: post['code'], caption: post['caption'], created_time: post['date'], link: LINK_URL_PREFIX + post['code'] + '/',
+            likes: post['likes'], comments: post['comments']
+          }
+        end
         def get_and_parse(url)
           Nokogiri::HTML HTTParty.get(url)
         end
