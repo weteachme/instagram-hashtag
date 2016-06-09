@@ -17,6 +17,12 @@ engines:
       - c4e9409d5a05c27c9d28ca84eb4c1ffc
       - c9684dab88f04ea97923fde4fc21e1e1
       - b6a4c8c37c2c54c27ef7680e65610931
+      - 7360d8311454c1d298e223043c75b08a
+      - cdb8ff60ef14830aeb86d43807c3b743
+      - c84bf8ba0b45e9365c58a60bc7b65f96
+      - 5a362a2ccb74adc2d43481169ac81ccd
 ratings:
   paths:
     - "**.rb"
+exclude_paths:
+  - 'specs/'

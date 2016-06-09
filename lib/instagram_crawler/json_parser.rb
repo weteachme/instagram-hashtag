@@ -1,6 +1,8 @@
 module InstagramCrawler
   module JSONParser
+
     protected
+
       def get_parsed_json(page_content)
         json_matcher = 'window._sharedData = '
         sibling = page_content.css('#react-root').last
