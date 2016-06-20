@@ -7,13 +7,13 @@ module InstagramCrawler
   class Crawl
     extend InstagramCrawler::JSONParser
 
-    DEFAULT_URL_PREFIX = 'https://www.instagram.com/explore/tags/'
+    DEFAULT_URL_PREFIX = 'https://www.instagram.com/'
+    TAG_URL_PREFIX = 'explore/tags/'
     LINK_URL_PREFIX = 'http://instagr.am/p/'
 
-    def self.get_info_hash(hashtag:, limit: 9)
-      url = DEFAULT_URL_PREFIX + hashtag
+    def self.get_info_hash(hashtag:, limit: 9, is_user: false)
+      url = set_url(hashtag, is_user)
       parse_page = get_and_parse(url)
-
       json = get_parsed_json(parse_page)
 
       data = json['entry_data']['TagPage']
@@ -22,7 +22,6 @@ module InstagramCrawler
       mapped_data = data.map do |post|
         get_hash_for_post(post)
       end
-
       mapped_data
     end
 
@@ -42,6 +41,15 @@ module InstagramCrawler
 
       def get_and_parse(url)
         Nokogiri::HTML HTTParty.get(url)
+      end
+
+      def set_url(hashtag, is_user)
+        prefix_url = if is_user
+                       DEFAULT_URL_PREFIX + TAG_URL_PREFIX
+                     else
+                       DEFAULT_URL_PREFIX
+                     end
+        prefix_url + hashtag
       end
     end
   end
