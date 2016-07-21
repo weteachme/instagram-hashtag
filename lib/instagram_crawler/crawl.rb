@@ -11,13 +11,19 @@ module InstagramCrawler
     TAG_URL_PREFIX = 'explore/tags/'
     LINK_URL_PREFIX = 'http://instagr.am/p/'
 
-    def self.get_info_hash(hashtag:, limit: 9, is_user: false)
-      url = set_url(hashtag, is_user)
+    @@hashtag = ''
+    @@limit = 9
+    @@is_user = false
+
+    def self.get_info_hash(hashtag:, limit: @@limit, is_user: @@is_user)
+      self.hashtag = hashtag
+      self.limit = limit
+      self.is_user = is_user
+
+      url = set_url
       parse_page = get_and_parse(url)
       json = get_parsed_json(parse_page)
-
-      data = json['entry_data']['TagPage']
-        .first['tag']['media']['nodes'].first(limit)
+      data = get_json_nodes(json)
 
       mapped_data = data.map do |post|
         get_hash_for_post(post)
@@ -26,6 +32,29 @@ module InstagramCrawler
     end
 
     class << self
+      [:hashtag, :limit, :is_user].each do |method|
+        define_method method do
+          eval "@@#{method.to_s}"
+        end
+
+        define_method "#{method}=" do |value|
+          value = if value.is_a? String
+                    "'#{value}'"
+                  else
+                    value
+                  end
+          eval "@@#{method.to_s}=#{value}"
+        end
+      end
+
+      def get_json_nodes(json)
+        page = is_user ? 'ProfilePage' : 'TagPage'
+        type = is_user ? 'user' : 'tag'
+
+        json['entry_data'][page]
+          .first[type]['media']['nodes'].first(limit)
+      end
+
       def get_hash_for_post(post)
         {
           id: post['id'],
@@ -43,11 +72,11 @@ module InstagramCrawler
         Nokogiri::HTML HTTParty.get(url)
       end
 
-      def set_url(hashtag, is_user)
+      def set_url
         prefix_url = if is_user
-                       DEFAULT_URL_PREFIX + TAG_URL_PREFIX
-                     else
                        DEFAULT_URL_PREFIX
+                     else
+                       DEFAULT_URL_PREFIX + TAG_URL_PREFIX
                      end
         prefix_url + hashtag
       end

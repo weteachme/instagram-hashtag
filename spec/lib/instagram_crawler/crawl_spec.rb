@@ -4,7 +4,8 @@ RSpec.describe InstagramCrawler::Crawl do
   describe '#call' do
     describe 'response check' do
       before(:each) do
-        allow(HTTParty).to receive(:get).and_return(get_file_string)
+        # decided to comment this to make real API test :) cheers!
+        #allow(HTTParty).to receive(:get).and_return(get_file_string)
         @result = InstagramCrawler::Crawl.get_info_hash(hashtag: 'wtm_tes')
       end
 
@@ -37,7 +38,8 @@ RSpec.describe InstagramCrawler::Crawl do
     end
 
     describe 'crawl username as well' do
-      before(:all) do
+      before(:each) do
+        #allow(HTTParty).to receive(:get).and_return(get_file_string(is_user: true))
         @result = InstagramCrawler::Crawl.get_info_hash(hashtag: 'oldhaileyburians', is_user: true)
       end
 
