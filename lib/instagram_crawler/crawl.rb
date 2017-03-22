@@ -2,6 +2,7 @@ require 'httparty'
 require 'nokogiri'
 require 'json'
 require_relative 'json_parser'
+require_relative 'api'
 
 module InstagramCrawler
   class Crawl
@@ -23,12 +24,16 @@ module InstagramCrawler
       url = set_url
       parse_page = get_and_parse(url)
       json = get_parsed_json(parse_page)
-      data = get_json_nodes(json)
+      data = json.any? ? get_json_nodes(json) : json
 
       mapped_data = data.map do |post|
         get_hash_for_post(post)
       end
       mapped_data
+    end
+
+    def self.tag_api(hashtag:, limit: @@limit)
+      Api.new(hashtag: hashtag, limit: limit)
     end
 
     class << self
