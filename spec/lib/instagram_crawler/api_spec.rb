@@ -118,13 +118,23 @@ RSpec.describe InstagramCrawler::Api do
         }]
       }.to_json
     end
+    let(:token) { 'sometoken' }
+    let(:have_token?) { true }
 
     before(:each) do
       allow(response).to receive(:parsed_response).and_return(JSON.parse(stubbed_response))
-      allow(InstagramCrawler::Api).to receive(:access_token).and_return('sometoken')
+      allow(InstagramCrawler::Api).to receive(:access_token).and_return('sometoken') if have_token?
       allow(InstagramCrawler::Api).to receive(:get).and_return(response)
     end
 
     it { expect(result).to eq([{:id=>"22699663", :images=>{"low_resolution"=>{"url"=>"http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_6.jpg", "width"=>306, "height"=>306}, "thumbnail"=>{"url"=>"http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_5.jpg", "width"=>150, "height"=>150}, "standard_resolution"=>{"url"=>"http://distillery.s3.amazonaws.com/media/2011/02/02/f9443f3443484c40b4792fa7c76214d5_7.jpg", "width"=>612, "height"=>612}}, :code=>nil, :caption=>"#Snow", :created_time=>"1296703540", :link=>"http://instagr.am/p/BWl6P/", :likes=>{"count"=>1}, :comments=>{"count"=>3}}, {:id=>nil, :images=>nil, :code=>nil, :caption=>nil, :link=>nil, :likes=>nil, :comments=>nil}]) }
+
+    describe 'access_token is nil' do
+      let(:have_token?) { false }
+
+      it do
+        expect { result }.to raise_error('Missing Instagram Access Token')
+      end
+    end
   end
 end
