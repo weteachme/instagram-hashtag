@@ -27,7 +27,7 @@ module InstagramCrawler
       data = json.any? ? get_json_nodes(json) : json
 
       mapped_data = data.map do |post|
-        get_hash_for_post(post)
+        get_hash_for_post(post['node'])
       end
       mapped_data
     end
@@ -54,10 +54,11 @@ module InstagramCrawler
 
       def get_json_nodes(json)
         page = is_user ? 'ProfilePage' : 'TagPage'
-        type = is_user ? 'user' : 'tag'
+        type = is_user ? 'user' : 'hashtag'
+        media = is_user ? 'edge_owner_to_timeline_media' : 'edge_hashtag_to_media'
 
         json['entry_data'][page]
-          .first[type]['media']['nodes'].first(limit)
+          .first['graphql'][type][media]['edges'].first(limit)
       end
 
       def get_hash_for_post(post)
@@ -65,12 +66,20 @@ module InstagramCrawler
           id: post['id'],
           images: {
             thumbnail: { url: post['thumbnail_src'] },
-            standard_resolution: { url: post['display_src'] }
+            standard_resolution: { url: post['display_url'] }
           },
-          code: post['code'], caption: post['caption'],
-          created_time: post['date'], link: LINK_URL_PREFIX + post['code'] + '/',
-          likes: post['likes'], comments: post['comments']
+          code: post['shortcode'], caption: get_caption(post),
+          created_time: post['taken_at_timestamp'], link: LINK_URL_PREFIX + post['shortcode'] + '/',
+          likes: post['edge_liked_by'], comments: post['edge_media_to_comment']
         }
+      end
+
+      def get_caption(post)
+        if post['edge_media_to_caption']['edges'].first
+          post['edge_media_to_caption']['edges'].first['node']['text']
+        else
+          ''
+        end
       end
 
       def get_and_parse(url)
